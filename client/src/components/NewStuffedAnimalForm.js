@@ -60,7 +60,7 @@ const StuffedAnimalForm = props => {
     <>
       <h2>Add Your New Frand</h2>
       <ErrorList errors={errors} />
-      <form onSubmit={handleSubmit} className="callout" >
+      <form onSubmit={handleSubmit} className="callout new-stuffed-animal-form" >
         <label>
          Name:
           <input

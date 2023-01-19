@@ -19,11 +19,13 @@ stuffedAnimalsRouter.get("/", async (req, res) => {
 })
 
 stuffedAnimalsRouter.post("/", async (req, res) => {
-  const StuffedAnimalData = cleanUserInput(req.body )
+  const stuffedAnimalData = cleanUserInput(req.body)
+
   try {
-    const newStuffedAnimal = await StuffedAnimal.query().insertAndFetch(StuffedAnimalData)
+    const newStuffedAnimal = await StuffedAnimal.query().insertAndFetch(stuffedAnimalData)
     return res.status(201).json({ stuffedAnimal: newStuffedAnimal })
   } catch (error) {
+    console.log(error)
   if (error instanceof ValidationError) {
     console.log(error)
     return res.status(422).json({ errors: error.data })

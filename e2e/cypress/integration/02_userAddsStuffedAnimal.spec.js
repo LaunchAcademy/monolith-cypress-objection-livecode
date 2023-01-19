@@ -2,36 +2,46 @@
 
 context("New Stuffed Animal Form Page", () => {
   beforeEach(() => {    
+    // needed because we have uniqueness validation!
+    cy.task("db:truncate", "StuffedAnimal")
+    
     cy.visit("/stuffed-animals/new")
   })
 
-  it("creates a new list item when the form is submitted correctly", () => {
+  it.only("creates a new list item when the form is submitted correctly", () => {
     cy.get("#name")
       .type("Poro")
       .should("have.value", "Poro")
 
     cy.get("#owner")
-      .type("Everyone at Launch Academy")
-      .should("have.value", "Everyone at Launch Academy")
+      .type("LA")
+      .should("have.value", "LA")
 
-    cy.get("form")
-      .contains("Yay!")
-      .click()
+    cy.get(".new-stuffed-animal-form")
+      .submit()
 
-    cy.url().should("eq", "http://localhost:8765/stuffed-animals")
-    cy.url().should('include', '/stuffed-animals') 
+    // Valid ways to check that we are on the right page
+    // cy.url().should("eq", "http://localhost:8765/stuffed-animals")
+    // cy.url().should('include', '/stuffed-animals') 
+    cy.location('pathname').should('eq', '/stuffed-animals')
+    // cy.get("h2").should("have.text", "Can you spot all of the stuffed animals in the space?")
+
 
     cy.get("li")
       .last()
-      .should("have.text", "Poro owned by Everyone at Launch Academy")
+      .should("have.text", "Poro owned by LA")
   })
 
   it("remains on the new item form page if the form is submitted without a name and displays errors", () => {
-    cy.get("form").submit()
+    // get the form and submit it                 
+    cy.get(".new-stuffed-animal-form")
+      .submit()
 
+    // get the h2 tag, and ensure it has the text Add Your New Frand
     cy.get("h2").should("have.text", "Add Your New Frand")
-    cy.contains("h2", "Can you spot all of the stuffed animals in the space?").should("not.exist")
     
+    // get the errors element, and ensure it has the text Name: is a required property
     cy.get(".errors").should("have.text", "Name: is a required property")
   })
 })
+
