@@ -4,39 +4,40 @@ context("Stuffed Animal Index Page", () => {
   beforeEach(() => {
     // clear the database so that tests are deterministic
     cy.task("db:truncate", "StuffedAnimal")
-
     // add the record, designating model name then data
     // adding an array of object will add multiple
+    // visit page
     cy.task("db:insert", { modelName: "StuffedAnimal", json: [
-      { 
-        name: "Dan Dan Potato Man",
-        owner: "my mom"
+      {
+        name: "Todd",
+        owner: "Nick"
       },
       {
-        name: "Nicholas Picholas Poo",
-        owner: "my mom"
+        name: "Fang",
+        owner: "Nick"
       }
-    ]
-  })
+    ] })
 
     cy.visit(`/stuffed-animals`)
   })
 
   context("when a user visits the stuffed animals index page", () => {
+    // target the first and last animal, and ensure their text is included on the page
     it("they see a list of all the animals", () => {
       cy.get(".stuffed-animals")
         .get("li")
         .first()
-        .should("have.text", "Dan Dan Potato Man owned by my mom")
+        .should("include.text", "Todd")
 
       cy.get(".stuffed-animals")
         .get("li")
         .last()
-        .should("include.text", "Nicholas Picholas Poo")
+        .should("include.text", "Fang")
     })
   })
   
 
+  // clicking on the link should bring us to the new animal form 
   it("has a link to the new animal form page", () => {
     cy.contains('Add More to the Collection!').click()
     cy.location('pathname').should('eq', '/stuffed-animals/new')

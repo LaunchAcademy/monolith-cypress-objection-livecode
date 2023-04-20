@@ -2,13 +2,13 @@
 
 context("New Stuffed Animal Form Page", () => {
   beforeEach(() => {    
-    // needed because we have uniqueness validation!
+    // need to truncate due to because we have uniqueness validation!
     cy.task("db:truncate", "StuffedAnimal")
-    
+
     cy.visit("/stuffed-animals/new")
   })
 
-  it.only("creates a new list item when the form is submitted correctly", () => {
+  it("creates a new list item when the form is submitted correctly", () => {
     cy.get("#name")
       .type("Poro")
       .should("have.value", "Poro")
