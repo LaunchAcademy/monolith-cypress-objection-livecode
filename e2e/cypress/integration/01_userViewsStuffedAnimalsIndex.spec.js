@@ -1,22 +1,19 @@
 /// <reference types="cypress" />
+// model name:string json: array/object with data
 
 context("Stuffed Animal Index Page", () => {
   beforeEach(() => {
     // clear the database so that tests are deterministic
     cy.task("db:truncate", "StuffedAnimal")
+
     // add the record, designating model name then data
     // adding an array of object will add multiple
     // visit page
     cy.task("db:insert", { modelName: "StuffedAnimal", json: [
-      {
-        name: "Todd",
-        owner: "Nick"
-      },
-      {
-        name: "Fang",
-        owner: "Nick"
-      }
-    ] })
+      { name: "Todd", owner: "Nick"},
+      { name: "Fang", owner: "Nick/Serena"}
+    ]})
+
 
     cy.visit(`/stuffed-animals`)
   })

@@ -3,7 +3,7 @@
 context("New Stuffed Animal Form Page", () => {
   beforeEach(() => {    
     // need to truncate due to because we have uniqueness validation!
-    cy.task("db:truncate", "StuffedAnimal")
+    cy.task("db:truncate")
 
     cy.visit("/stuffed-animals/new")
   })
