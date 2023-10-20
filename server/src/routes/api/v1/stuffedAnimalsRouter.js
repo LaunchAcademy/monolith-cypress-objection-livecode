@@ -11,6 +11,7 @@ const stuffedAnimalsRouter = new express.Router()
 stuffedAnimalsRouter.get("/", async (req, res) => {
   try {
     const stuffedAnimals = await StuffedAnimal.query()
+    console.log(stuffedAnimals)
     return res.status(200).json({ stuffedAnimals })
   }
   catch (err) {
@@ -25,12 +26,19 @@ stuffedAnimalsRouter.post("/", async (req, res) => {
     const newStuffedAnimal = await StuffedAnimal.query().insertAndFetch(stuffedAnimalData)
     return res.status(201).json({ stuffedAnimal: newStuffedAnimal })
   } catch (error) {
-    console.log(error)
     if (error instanceof ValidationError) {
+
       return res.status(422).json({ errors: error.data })
     }
   return res.status(500).json({ errors: error })
 }
+})
+
+stuffedAnimalsRouter.get("/:id", async (req, res) => {
+
+  const stuffedAnimal = await StuffedAnimal.query().findById(req.params.id)
+
+  return res.json({ stuffedAnimal: stuffedAnimal })
 })
 
 

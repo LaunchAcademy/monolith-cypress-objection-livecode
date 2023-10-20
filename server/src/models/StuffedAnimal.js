@@ -17,7 +17,7 @@ class StuffedAnimal extends unique(Model) {
       type: "object",
       required: ["name"],
       properties: {
-        name: { type: "string" },
+        name: { type: "string", minLength: 2, maxLength: 15 },
         owner: { type: "string" },
       }
     }

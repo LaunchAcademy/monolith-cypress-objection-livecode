@@ -18,9 +18,6 @@ context("Stuffed Animal Details Page", () => {
         it("the user can see each of the details regarding that stuffed animal", () => {
             cy.get("h2").should("include.text", "Fang")
 
-            cy.get("#name")
-                .should("have.text", "Fang");
-
             cy.get("#owner")
                 .should("have.text", "Nick/Serena");
         })

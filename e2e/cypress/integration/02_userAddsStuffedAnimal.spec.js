@@ -3,7 +3,9 @@
 context("New Stuffed Animal Form Page", () => {
   beforeEach(() => {    
     // need to truncate due to because we have uniqueness validation!
-    cy.task("db:truncate")
+    cy.task("db:truncate", "StuffedAnimal")
+
+    cy.task("db:insert", { modelName: "StuffedAnimal", json: { name: "Todd", owner: "Nick" } })
 
     cy.visit("/stuffed-animals/new")
   })
@@ -32,7 +34,8 @@ context("New Stuffed Animal Form Page", () => {
       .should("have.text", "Poro owned by LA")
   })
 
-  it("remains on the new item form page if the form is submitted without a name and displays errors", () => {
+  describe("when the form is submitted incorrectly", () => {
+    it("remains on the new item form page if the form is submitted without a name and displays errors", () => {
     // get the form and submit it                 
     cy.get(".new-stuffed-animal-form")
       .submit()
@@ -42,6 +45,20 @@ context("New Stuffed Animal Form Page", () => {
     
     // get the errors element, and ensure it has the text Name: is a required property
     cy.get(".errors").should("have.text", "Name: is a required property")
+  })
+  })
+
+
+  it("remains on the item form page, and shows uniqueness error if adding a duplicate record", () => {
+    cy.get("#name")
+    .type("Todd")
+
+    cy.get(".new-stuffed-animal-form")
+      .submit()
+
+    cy.get("h2").should("have.text", "Add Your New Frand")
+
+    cy.get(".errors").should("have.text", "Name already in use.")
   })
 })
 
